@@ -1,5 +1,34 @@
+/*
+ Given a binary tree
+
+    struct TreeLinkNode {
+      TreeLinkNode *left;
+      TreeLinkNode *right;
+      TreeLinkNode *next;
+    }
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+
+Note:
+
+You may only use constant extra space.
+You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
+For example,
+Given the following perfect binary tree,
+         1
+       /  \
+      2    3
+     / \  / \
+    4  5  6  7
+After calling your function, the tree should look like:
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \  / \
+    4->5->6->7 -> NULL
+ */
 import java.util.List;
-import java.util.Stack;
 
 import core.Util;
 
@@ -8,32 +37,31 @@ public class PopulatingNextRightPointersinEachNode {
 		if (root == null) {
 			return;
 		}
-		Stack<TreeLinkNode> stack = new Stack<TreeLinkNode>();
-		TreeLinkNode head = root;
-		do {
-			if (head.left != null) {
-				stack.push(head);
-				head = head.left;
-			}
-			else {
-				if (head.right != null) {
-					head = head.right;
-				}
-				else {
-					do {
-						if (stack.size() == 0) {
-							break;
-						}
-						head = stack.pop();
-					} while (head.right == null);
-					if (head.right == null) {
-						break;
-					}
-					head = head.right;
-				}
-			}
-		} while (stack.size() >= 0);
+		if (root.left != null) {
+			this.recurseRightConnect(root.right, root);
+			this.recurseLeftConnect(root.left, root);
+		}
+	}
 
+	void recurseRightConnect(TreeLinkNode node, TreeLinkNode parent) {
+		parent = parent.next;
+		if (parent == null) {
+		}
+		else {
+			node.next = parent.left;
+		}
+		if (node.left != null) {
+			this.recurseRightConnect(node.right, node);
+			this.recurseLeftConnect(node.left, node);
+		}
+	}
+
+	void recurseLeftConnect(TreeLinkNode node, TreeLinkNode parent) {
+		node.next = parent.right;
+		if (node.left != null) {
+			this.recurseRightConnect(node.right, node);
+			this.recurseLeftConnect(node.left, node);
+		}
 	}
 
 	public static void main(String[] args) {
